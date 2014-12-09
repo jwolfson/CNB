@@ -1,0 +1,13 @@
+Package: CNB
+Type: Package
+Title: Computing the Censored Naive Bayes (CNB) estimator
+Version: 1.0
+Date: 2014-12-08
+Author: Julian Wolfson
+Maintainer: Julian Wolfson <julianw@umn.edu>
+Description: This package implements two versions of the Censored Naive Bayes
+    estimator as described in Wolfson et al. (2014)
+License: GPL-3
+Imports:
+    survMisc,
+    survival
