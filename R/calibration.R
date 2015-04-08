@@ -17,11 +17,11 @@ calib.stat <- function(p,T.test,C.test,cutpts,t) {
   risk.class <- cut(p,cutpts,labels=FALSE)
   lev.stats <- sapply(1:(length(cutpts)-1),function(f) {
     ind <- which(risk.class==f)
-    S.KM <- survMisc::calcSurv(Surv(T.test[ind],C.test[ind]))
-    ind.surv <- max(which(S.KM$t<=t))
-    p.KM <- S.KM$SKM[ind.surv]
+    sf <- survfit(Surv(T.test[ind],C.test[ind])~1)
+    ind.surv <- max(which(sf$time<=t))
+    p.KM <- sf$surv[ind.surv]
     ##print(c(cutpts[f],p.KM,mean(p[ind],na.rm=TRUE),sqrt(S.KM$SKMV[ind.surv])))
-    (mean(p[ind],na.rm=TRUE) - p.KM)^2/S.KM$SKMV[ind.surv]
+    (mean(p[ind],na.rm=TRUE) - p.KM)^2/sf$std.err[ind.surv]
   })
   
   sum(lev.stats,na.rm=TRUE)
@@ -47,9 +47,9 @@ calib.table <- function(LP,T.test,C.test,cutpts,t,modelnames=rep("",length(LP)))
     risk.class <- cut(p,cutpts,labels=FALSE)
     lev.stats <- sapply(1:(length(cutpts)-1),function(f) {
       ind <- which(risk.class==f)
-      S.KM <- survMisc::calcSurv(Surv(T.test[ind],C.test[ind]))
-      ind.surv <- max(which(S.KM$t<=t))
-      p.KM <- S.KM$SKM[ind.surv]
+      sf <- survfit(Surv(T.test[ind],C.test[ind])~1)
+      ind.surv <- max(which(sf$time<=t))
+      p.KM <- sf$surv[ind.surv]
       ##print(c(cutpts[f],p.KM,mean(p[ind],na.rm=TRUE),sqrt(S.KM$SKMV[ind.surv])))
       c(n=length(ind),pbar=mean(p[ind],na.rm=TRUE),pKM=1-p.KM)
     })
